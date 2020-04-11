@@ -40,6 +40,9 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
+//Yup, we are doing that.
+#undef SWITCH
+
 /* Identify Bison output.  */
 #define YYBISON 1
 

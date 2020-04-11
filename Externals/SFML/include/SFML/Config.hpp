@@ -88,7 +88,7 @@
 
     #elif defined(__OpenBSD__)
 
-        // OpenBSD
+        // OpenBSD  
         #define SFML_SYSTEM_OPENBSD
 
     #else

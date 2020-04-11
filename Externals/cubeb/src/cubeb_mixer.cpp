@@ -377,11 +377,11 @@ cubeb_downmix(long inframes,
               cubeb_stream_params const * stream_params,
               cubeb_stream_params const * mixer_params)
 {
-  assert(in && out);
-  assert(inframes);
-  assert(stream_params->channels >= mixer_params->channels &&
-         mixer_params->channels > 0);
-  assert(stream_params->layout != CUBEB_LAYOUT_UNDEFINED);
+  //assert(in && out);
+  //assert(inframes);
+  //assert(stream_params->channels >= mixer_params->channels &&
+  //      mixer_params->channels > 0);
+  //assert(stream_params->layout != CUBEB_LAYOUT_UNDEFINED);
 
   unsigned int in_channels = stream_params->channels;
   cubeb_channel_layout in_layout = stream_params->layout;

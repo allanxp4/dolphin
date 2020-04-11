@@ -22,6 +22,9 @@
 #include <assert.h>
 #include <limits.h>
 
+//N_SWITCH
+#include <climits>
+
 #ifdef PUGIXML_WCHAR_MODE
 #	include <wchar.h>
 #endif

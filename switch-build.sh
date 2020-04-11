@@ -1,0 +1,1 @@
+export ENABLE_NOGUI=OFF
