@@ -2,6 +2,8 @@
 // Licensed under GPLv2+
 // Refer to the license.txt file included.
 //
+#ifndef __SWITCH__
+
 #pragma once
 
 #include <enet/enet.h>
@@ -11,3 +13,5 @@ namespace ENetUtil
 void WakeupThread(ENetHost* host);
 int ENET_CALLBACK InterceptCallback(ENetHost* host, ENetEvent* event);
 }  // namespace ENetUtil
+
+#endif

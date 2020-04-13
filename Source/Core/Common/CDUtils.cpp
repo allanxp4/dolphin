@@ -25,6 +25,7 @@
 #include <IOKit/storage/IOCDMedia.h>
 #include <IOKit/storage/IOMedia.h>
 #include <paths.h>
+#elif __SWITCH__
 #else
 #include <climits>
 #include <fcntl.h>
@@ -135,6 +136,12 @@ std::vector<std::string> GetCDDevices()
   IOObjectRelease(media_iterator);
   return drives;
 }
+#elif defined __SWITCH__
+std::vector<std::string> GetCDDevices(){
+  std::vector<std::string> dummyDrives;
+  return dummyDrives;
+}
+
 #else
 // checklist: /dev/cdrom, /dev/dvd /dev/hd?, /dev/scd? /dev/sr?
 struct CheckListEntry
@@ -209,15 +216,17 @@ std::vector<std::string> GetCDDevices()
 // Returns true if device is a cdrom/dvd drive
 bool IsCDROMDevice(std::string device)
 {
-#ifndef _WIN32
-  // Resolve symbolic links. This allows symbolic links to valid
-  // drives to be passed from the command line with the -e flag.
-  char resolved_path[PATH_MAX];
-  char* devname = realpath(device.c_str(), resolved_path);
-  if (!devname)
-    return false;
-  device = devname;
-#endif
+ #ifndef  __SWITCH__
+ #ifndef _WIN32
+   // Resolve symbolic links. This allows symbolic links to valid
+   // drives to be passed from the command line with the -e flag.
+   char resolved_path[PATH_MAX];
+   char* devname = realpath(device.c_str(), resolved_path);
+   if (!devname)
+     return false;
+   device = devname;
+ #endif
+ #endif
 
   std::vector<std::string> devices = GetCDDevices();
   for (const std::string& d : devices)

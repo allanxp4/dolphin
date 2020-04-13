@@ -17,7 +17,9 @@
 #include "Core/IOS/USB/Bluetooth/BTEmu.h"
 #include "Core/IOS/USB/Bluetooth/WiimoteDevice.h"
 #include "Core/Movie.h"
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
+#endif
 
 #include "InputCommon/ControllerEmu/ControlGroup/ControlGroup.h"
 #include "InputCommon/InputConfig.h"
@@ -219,9 +221,11 @@ bool ButtonPressed(int number)
   if (s_last_connect_request_counter[number] > 0)
   {
     --s_last_connect_request_counter[number];
+#ifndef __SWITCH__
     if (source != WiimoteSource::None && NetPlay::IsNetPlayRunning())
       Wiimote::NetPlay_GetButtonPress(number, false);
     return false;
+#endif
   }
 
   bool button_pressed = false;
@@ -232,9 +236,10 @@ bool ButtonPressed(int number)
 
   if (source == WiimoteSource::Real)
     button_pressed = WiimoteReal::CheckForButtonPress(number);
-
+#ifndef __SWITCH__
   if (source != WiimoteSource::None && NetPlay::IsNetPlayRunning())
     button_pressed = Wiimote::NetPlay_GetButtonPress(number, button_pressed);
+#endif
 
   return button_pressed;
 }

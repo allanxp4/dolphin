@@ -23,7 +23,11 @@
 #include "Core/IOS/IOS.h"
 #include "Core/IOS/Uids.h"
 #include "Core/Movie.h"
+
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
+#endif
+
 #include "Core/SysConf.h"
 
 namespace Core
@@ -76,6 +80,11 @@ static void InitializeDeterministicWiiSaves(FS::FileSystem* session_fs)
   const auto configured_fs = FS::MakeFileSystem(FS::Location::Configured);
   if (Movie::IsRecordingInput())
   {
+#ifdef __SWITCH__
+      // TODO: Check for the actual save data
+      const std::string path = Common::GetTitleDataPath(title_id) + "/banner.bin";
+      Movie::SetClearSave(!configured_fs->GetMetadata(IOS::PID_KERNEL, IOS::PID_KERNEL, path));
+#else
     if (NetPlay::IsNetPlayRunning() && !SConfig::GetInstance().bCopyWiiSaveNetplay)
     {
       Movie::SetClearSave(true);
@@ -87,7 +96,10 @@ static void InitializeDeterministicWiiSaves(FS::FileSystem* session_fs)
       Movie::SetClearSave(!configured_fs->GetMetadata(IOS::PID_KERNEL, IOS::PID_KERNEL, path));
     }
   }
+#endif
 
+#ifndef __SWITCH__
+  //TODO/switch: is this just netplay/movie code??
   if ((NetPlay::IsNetPlayRunning() && SConfig::GetInstance().bCopyWiiSaveNetplay) ||
       (Movie::IsMovieActive() && !Movie::IsStartingFromClearSave()))
   {
@@ -129,6 +141,7 @@ static void InitializeDeterministicWiiSaves(FS::FileSystem* session_fs)
         WARN_LOG(CORE, "Failed to copy Mii database to the NAND");
       }
     }
+#endif
   }
 }
 
@@ -235,11 +248,13 @@ void InitializeWiiFileSystemContents()
 
 void CleanUpWiiFileSystemContents()
 {
+#ifndef __SWITCH__
   if (s_temp_wii_root.empty() || !SConfig::GetInstance().bEnableMemcardSdWriting ||
       NetPlay::GetWiiSyncFS())
   {
     return;
   }
+#endif
 
   IOS::HLE::EmulationKernel* ios = IOS::HLE::GetIOS();
   const auto configured_fs = FS::MakeFileSystem(FS::Location::Configured);

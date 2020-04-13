@@ -2,12 +2,16 @@
 // Licensed under GPLv2+
 // Refer to the license.txt file included.
 
+#ifndef __SWITCH__
+
 #include "ENetUtil.h"
 
 #include "Common/CommonTypes.h"
 
 namespace ENetUtil
 {
+
+#ifndef __SWITCH__
 void WakeupThread(ENetHost* host)
 {
   // Send ourselves a spurious message.  This is hackier than it should be.
@@ -36,4 +40,20 @@ int ENET_CALLBACK InterceptCallback(ENetHost* host, ENetEvent* event)
   }
   return 0;
 }
-}  // namespace ENetUtil
+
+}
+#else
+void WakeupThread(ENetHost* host)
+{
+  //noop
+}
+
+int ENET_CALLBACK InterceptCallback(ENetHost* host, ENetEvent* event)
+{
+  return 0; //noop
+}
+
+#endif
+// namespace ENetUtil
+#endif
+

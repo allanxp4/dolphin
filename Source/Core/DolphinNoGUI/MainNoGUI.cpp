@@ -218,7 +218,9 @@ int main(int argc, char* argv[])
   struct sigaction sa;
   sa.sa_handler = signal_handler;
   sigemptyset(&sa.sa_mask);
+#ifndef __SWITCH__
   sa.sa_flags = SA_RESETHAND;
+#endif
   sigaction(SIGINT, &sa, nullptr);
   sigaction(SIGTERM, &sa, nullptr);
 #endif

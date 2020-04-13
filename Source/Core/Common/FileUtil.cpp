@@ -10,6 +10,8 @@
 #include <fstream>
 #include <limits.h>
 #include <string>
+#ifndef __SWITCH__
+#endif
 #include <sys/stat.h>
 #include <vector>
 

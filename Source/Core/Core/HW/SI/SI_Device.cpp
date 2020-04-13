@@ -15,7 +15,9 @@
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Core/HW/SI/SI_DeviceDanceMat.h"
+#ifndef __SWITCH__
 #include "Core/HW/SI/SI_DeviceGBA.h"
+#endif
 #include "Core/HW/SI/SI_DeviceGCAdapter.h"
 #include "Core/HW/SI/SI_DeviceGCController.h"
 #include "Core/HW/SI/SI_DeviceGCSteeringWheel.h"
@@ -137,8 +139,10 @@ std::unique_ptr<ISIDevice> SIDevice_Create(const SIDevices device, const int por
   case SIDEVICE_GC_TARUKONGA:
     return std::make_unique<CSIDevice_TaruKonga>(device, port_number);
 
+#ifndef __SWITCH__
   case SIDEVICE_GC_GBA:
     return std::make_unique<CSIDevice_GBA>(device, port_number);
+#endif
 
   case SIDEVICE_GC_KEYBOARD:
     return std::make_unique<CSIDevice_Keyboard>(device, port_number);

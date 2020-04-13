@@ -10,6 +10,8 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <pthread.h>
+
 #endif
 
 #ifdef __APPLE__
@@ -137,6 +139,8 @@ void SetCurrentThreadName(const char* szThreadName)
   pthread_set_name_np(pthread_self(), szThreadName);
 #elif defined __HAIKU__
   rename_thread(find_thread(nullptr), szThreadName);
+#elif defined __SWITCH__
+  //libnx pthread doesn't support thread names
 #else
   // linux doesn't allow to set more than 16 bytes, including \0.
   pthread_setname_np(pthread_self(), std::string(szThreadName).substr(0, 15).c_str());

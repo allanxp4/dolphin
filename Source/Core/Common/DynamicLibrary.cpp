@@ -2,6 +2,7 @@
 // Licensed under GPLv2+
 // Refer to the license.txt file included.
 
+
 #include "Common/DynamicLibrary.h"
 
 #include <cstring>
@@ -12,7 +13,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-#else
+#endif
+#ifndef __SWITCH__
 #include <dlfcn.h>
 #endif
 
@@ -73,7 +75,8 @@ bool DynamicLibrary::Open(const char* filename)
 {
 #ifdef _WIN32
   m_handle = reinterpret_cast<void*>(LoadLibraryA(filename));
-#else
+#endif
+#ifndef __SWITCH__
   m_handle = dlopen(filename, RTLD_NOW);
 #endif
   return m_handle != nullptr;
@@ -86,7 +89,8 @@ void DynamicLibrary::Close()
 
 #ifdef _WIN32
   FreeLibrary(reinterpret_cast<HMODULE>(m_handle));
-#else
+#endif
+#ifndef __SWITCH__
   dlclose(m_handle);
 #endif
   m_handle = nullptr;
@@ -96,8 +100,10 @@ void* DynamicLibrary::GetSymbolAddress(const char* name) const
 {
 #ifdef _WIN32
   return reinterpret_cast<void*>(GetProcAddress(reinterpret_cast<HMODULE>(m_handle), name));
-#else
+#endif
+#ifndef __SWITCH__
   return reinterpret_cast<void*>(dlsym(m_handle, name));
 #endif
 }
 }  // namespace Common
+

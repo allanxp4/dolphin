@@ -6,6 +6,7 @@
 #include <atomic>
 #include <string>
 
+
 namespace Common
 {
 /**
@@ -65,3 +66,4 @@ private:
 };
 
 }  // namespace Common
+

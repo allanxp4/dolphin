@@ -33,7 +33,11 @@
 #include "Core/HW/Wiimote.h"
 #include "Core/Host.h"
 #include "Core/Movie.h"
+
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
+#endif
+
 #include "Core/PowerPC/PowerPC.h"
 
 #include "VideoCommon/FrameDump.h"
@@ -202,11 +206,13 @@ static void DoState(PointerWrap& p)
 
 void LoadFromBuffer(std::vector<u8>& buffer)
 {
+#ifndef __SWITCH__
   if (NetPlay::IsNetPlayRunning())
   {
     OSD::AddMessage("Loading savestates is disabled in Netplay to prevent desyncs");
     return;
   }
+#endif
 
   Core::RunOnCPUThread(
       [&] {
@@ -537,11 +543,14 @@ void LoadAs(const std::string& filename)
   {
     return;
   }
+
+#ifndef __SWITCH__
   else if (NetPlay::IsNetPlayRunning())
   {
     OSD::AddMessage("Loading savestates is disabled in Netplay to prevent desyncs");
     return;
   }
+#endif
 
   s_load_or_save_in_progress = true;
 

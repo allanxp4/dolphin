@@ -43,9 +43,9 @@ add_library(inputcommon
   ControllerEmu/ControlGroup/Triggers.h
   ControllerEmu/Setting/NumericSetting.cpp
   ControllerEmu/Setting/NumericSetting.h
-  ControllerInterface/DualShockUDPClient/DualShockUDPClient.cpp
-  ControllerInterface/DualShockUDPClient/DualShockUDPClient.h
-  ControllerInterface/DualShockUDPClient/DualShockUDPProto.h
+  #ControllerInterface/DualShockUDPClient/DualShockUDPClient.cpp
+  #ControllerInterface/DualShockUDPClient/DualShockUDPClient.h
+  #ControllerInterface/DualShockUDPClient/DualShockUDPProto.h
   ControllerInterface/ControllerInterface.cpp
   ControllerInterface/ControllerInterface.h
   ControllerInterface/Device.cpp
@@ -131,6 +131,8 @@ endif()
 
 if(ANDROID)
   target_sources(inputcommon PRIVATE GCAdapter_Android.cpp)
+elseif(N_SWITCH)
+  #no libusb on nintendo switch, so no gbadapter
 else()
   target_sources(inputcommon PRIVATE
     GCAdapter.cpp

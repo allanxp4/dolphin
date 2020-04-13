@@ -23,7 +23,9 @@
 #include "Core/Core.h"
 #include "Core/HW/Wiimote.h"
 #include "Core/Movie.h"
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
+#endif
 
 #include "Core/HW/WiimoteCommon/WiimoteConstants.h"
 #include "Core/HW/WiimoteCommon/WiimoteHid.h"
@@ -548,6 +550,7 @@ void Wiimote::SendDataReport()
     Movie::CallWiiInputManip(rpt_builder, m_index, m_active_extension, GetExtensionEncryptionKey());
   }
 
+#ifndef __SWITCH__
   if (NetPlay::IsNetPlayRunning())
   {
     NetPlay_GetWiimoteData(m_index, rpt_builder.GetDataPtr(), rpt_builder.GetDataSize(),
@@ -556,6 +559,7 @@ void Wiimote::SendDataReport()
     // TODO: clean up how m_status.buttons is updated.
     rpt_builder.GetCoreData(&m_status.buttons);
   }
+#endif
 
   Movie::CheckWiimoteStatus(m_index, rpt_builder, m_active_extension, GetExtensionEncryptionKey());
 

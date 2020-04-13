@@ -161,10 +161,22 @@ std::string StringFromFormat(const char* format, ...)
   return res;
 }
 
+#ifdef __SWITCH__
+int _vscprintf (const char * format, va_list pargs)
+{
+    int retval;
+    va_list argcopy;
+    va_copy(argcopy, pargs);
+    retval = vsnprintf(NULL, 0, format, argcopy);
+    va_end(argcopy);
+    return retval;
+}
+#endif
+
 std::string StringFromFormatV(const char* format, va_list args)
 {
   char* buf = nullptr;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__SWITCH__)
   int required = _vscprintf(format, args);
   buf = new char[required + 1];
   CharArrayFromFormatV(buf, required + 1, format, args);

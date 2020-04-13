@@ -7,7 +7,9 @@
 #include <fmt/format.h>
 #include <imgui.h>
 
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
+#endif
 
 constexpr float DEFAULT_WINDOW_WIDTH = 220.0f;
 constexpr float DEFAULT_WINDOW_HEIGHT = 45.0f;
@@ -42,7 +44,11 @@ void NetPlayGolfUI::Display()
     return;
   }
 
-  ImGui::Text("Current Golfer: %s", client->GetCurrentGolfer().c_str());
+    //TODO: check better method of disabling this
+
+#ifndef __SWITCH__
+ImGui::Text("Current Golfer: %s", client->GetCurrentGolfer().c_str());
+
 
   if (client->LocalPlayerHasControllerMapped())
   {
@@ -62,6 +68,7 @@ void NetPlayGolfUI::Display()
       }
     }
   }
+#endif
 
   ImGui::End();
 }

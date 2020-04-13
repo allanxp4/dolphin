@@ -17,14 +17,18 @@
 #include "Common/StringUtil.h"
 #else
 #include <stdio.h>
+#ifndef __SWITCH__
 #include <sys/mman.h>
+#endif
 #include <sys/types.h>
 #if defined __APPLE__ || defined __FreeBSD__ || defined __OpenBSD__
 #include <sys/sysctl.h>
 #elif defined __HAIKU__
 #include <OS.h>
 #else
+#ifndef __SWITCH__
 #include <sys/sysinfo.h>
+#endif
 #endif
 #endif
 
@@ -37,6 +41,10 @@ void* AllocateExecutableMemory(size_t size)
 {
 #if defined(_WIN32)
   void* ptr = VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("AllocateExecutableMemory: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
+    void* ptr = nullptr;
 #else
   void* ptr =
       mmap(nullptr, size, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
@@ -55,6 +63,10 @@ void* AllocateMemoryPages(size_t size)
 {
 #ifdef _WIN32
   void* ptr = VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("AllocateExecutableMemory: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
+    void* ptr = nullptr;
 #else
   void* ptr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 
@@ -91,6 +103,9 @@ void FreeMemoryPages(void* ptr, size_t size)
 #ifdef _WIN32
     if (!VirtualFree(ptr, 0, MEM_RELEASE))
       PanicAlert("FreeMemoryPages failed!\nVirtualFree: %s", GetLastErrorString().c_str());
+#elif defined(__SWITCH__)
+      PanicAlert("FreeMemoryPages: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
+      void* ptr = nullptr;
 #else
     if (munmap(ptr, size) != 0)
       PanicAlert("FreeMemoryPages failed!\nmunmap: %s", LastStrerrorString().c_str());
@@ -116,6 +131,9 @@ void ReadProtectMemory(void* ptr, size_t size)
   DWORD oldValue;
   if (!VirtualProtect(ptr, size, PAGE_NOACCESS, &oldValue))
     PanicAlert("ReadProtectMemory failed!\nVirtualProtect: %s", GetLastErrorString().c_str());
+#elif __SWITCH__
+    //TODO implement this
+    PanicAlert("ReadProtectMemory: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   if (mprotect(ptr, size, PROT_NONE) != 0)
     PanicAlert("ReadProtectMemory failed!\nmprotect: %s", LastStrerrorString().c_str());
@@ -128,6 +146,9 @@ void WriteProtectMemory(void* ptr, size_t size, bool allowExecute)
   DWORD oldValue;
   if (!VirtualProtect(ptr, size, allowExecute ? PAGE_EXECUTE_READ : PAGE_READONLY, &oldValue))
     PanicAlert("WriteProtectMemory failed!\nVirtualProtect: %s", GetLastErrorString().c_str());
+#elif __SWITCH__
+    //TODO implement this
+    PanicAlert("WriteProtectMemory: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   if (mprotect(ptr, size, allowExecute ? (PROT_READ | PROT_EXEC) : PROT_READ) != 0)
     PanicAlert("WriteProtectMemory failed!\nmprotect: %s", LastStrerrorString().c_str());
@@ -140,6 +161,9 @@ void UnWriteProtectMemory(void* ptr, size_t size, bool allowExecute)
   DWORD oldValue;
   if (!VirtualProtect(ptr, size, allowExecute ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE, &oldValue))
     PanicAlert("UnWriteProtectMemory failed!\nVirtualProtect: %s", GetLastErrorString().c_str());
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("UnWriteProtectMemory: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   if (mprotect(ptr, size,
                allowExecute ? (PROT_READ | PROT_WRITE | PROT_EXEC) : PROT_WRITE | PROT_READ) != 0)
@@ -174,6 +198,8 @@ size_t MemPhysical()
   system_info sysinfo;
   get_system_info(&sysinfo);
   return static_cast<size_t>(sysinfo.max_pages * B_PAGE_SIZE);
+#elif defined(__SWITCH__)
+  return 4294967296; //:p TODO: real memory size, but as switch is fixed hardware, maybe not worth it
 #else
   struct sysinfo memInfo;
   sysinfo(&memInfo);

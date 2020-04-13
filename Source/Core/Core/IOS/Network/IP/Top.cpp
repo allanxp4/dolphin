@@ -42,9 +42,11 @@
 
 #else
 #include <arpa/inet.h>
+#ifndef __SWITCH__
 #include <ifaddrs.h>
-#include <netinet/in.h>
 #include <resolv.h>
+#endif
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -213,6 +215,8 @@ static std::optional<DefaultInterface> GetSystemDefaultInterface()
         return DefaultInterface{entry.dwAddr, entry.dwMask, entry.dwBCastAddr};
     }
   }
+#elif defined(__SWITCH__)
+    return {};
 #elif !defined(__ANDROID__)
   // Assume that the address that is used to access the Internet corresponds
   // to the default interface.
@@ -616,7 +620,7 @@ IPCCommandResult NetIPTop::HandlePollRequest(const IOCtlRequest& request)
   if (nfds == 0)
     ERROR_LOG(IOS_NET, "Hidden POLL");
 
-  std::vector<pollfd_t> ufds(nfds);
+  std::vector<pollfd> ufds(nfds);
 
   for (int i = 0; i < nfds; ++i)
   {

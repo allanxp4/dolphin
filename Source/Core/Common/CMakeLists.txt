@@ -95,8 +95,8 @@ add_library(common
   PerformanceCounter.h
   Profiler.cpp
   Profiler.h
-  QoSSession.cpp
-  QoSSession.h
+  #QoSSession.cpp
+  #QoSSession.h
   Random.cpp
   Random.h
   Result.h
@@ -104,8 +104,8 @@ add_library(common
   SDCardUtil.cpp
   SDCardUtil.h
   Semaphore.h
-  SFMLHelper.cpp
-  SFMLHelper.h
+  #SFMLHelper.cpp
+  #SFMLHelper.h
   SettingsHandler.cpp
   SettingsHandler.h
   SPSCQueue.h
@@ -117,9 +117,9 @@ add_library(common
   Thread.h
   Timer.cpp
   Timer.h
-  TraversalClient.cpp
-  TraversalClient.h
-  TraversalProto.h
+  #TraversalClient.cpp
+  #TraversalClient.h
+  #TraversalProto.h
   UPnP.cpp
   UPnP.h
   VariantUtil.h
@@ -132,7 +132,7 @@ add_library(common
 target_link_libraries(common
 PUBLIC
   ${CMAKE_THREAD_LIBS_INIT}
-  enet
+  #enet
   fmt::fmt
   ${MBEDTLS_LIBRARIES}
   minizip

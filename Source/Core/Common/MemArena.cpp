@@ -20,7 +20,9 @@
 #include <cerrno>
 #include <cstring>
 #include <fcntl.h>
+#ifndef __SWITCH__
 #include <sys/mman.h>
+#endif
 #include <unistd.h>
 #ifdef ANDROID
 #include <linux/ashmem.h>
@@ -67,6 +69,9 @@ void MemArena::GrabSHMSegment(size_t size)
     NOTICE_LOG(MEMMAP, "Ashmem allocation failed");
     return;
   }
+#elif defined(__SWITCH__)
+  //TODO: actual implementation
+  PanicAlert("MemArena::GrabSHMSegment: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   const std::string file_name = "/dolphin-emu." + std::to_string(getpid());
   fd = shm_open(file_name.c_str(), O_RDWR | O_CREAT | O_EXCL, 0600);
@@ -95,6 +100,9 @@ void* MemArena::CreateView(s64 offset, size_t size, void* base)
 {
 #ifdef _WIN32
   return MapViewOfFileEx(hMemoryMapping, FILE_MAP_ALL_ACCESS, 0, (DWORD)((u64)offset), size, base);
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("MemArena::CreateView: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   void* retval = mmap(base, size, PROT_READ | PROT_WRITE,
                       MAP_SHARED | ((base == nullptr) ? 0 : MAP_FIXED), fd, offset);
@@ -115,6 +123,9 @@ void MemArena::ReleaseView(void* view, size_t size)
 {
 #ifdef _WIN32
   UnmapViewOfFile(view);
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("MemArena::ReleaseView: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
 #else
   munmap(view, size);
 #endif
@@ -137,6 +148,10 @@ u8* MemArena::FindMemoryBase()
   }
   VirtualFree(base, 0, MEM_RELEASE);
   return base;
+#elif defined(__SWITCH__)
+    //TODO implement this
+    PanicAlert("MemArena::ReleaseView: NO-OP: needs to be implemented, this is here as a placeholder while I figure out how to translate this to switch");
+    return nullptr;
 #else
 #ifdef ANDROID
   // Android 4.3 changed how mmap works.

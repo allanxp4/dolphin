@@ -15,7 +15,9 @@
 #include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#ifndef __SWITCH__
 #include <sys/un.h>
+#endif
 #endif
 
 #include "Common/Logging/Log.h"
@@ -793,6 +795,8 @@ static void gdb_init_generic(int domain, const sockaddr* server_addr, socklen_t 
                              sockaddr* client_addr, socklen_t* client_addrlen);
 
 #ifndef _WIN32
+#elif defined(__SWITCH__)
+#else
 void gdb_init_local(const char* socket)
 {
   unlink(socket);
@@ -807,6 +811,7 @@ void gdb_init_local(const char* socket)
 
 void gdb_init(u32 port)
 {
+#ifndef __SWITCH__
   sockaddr_in saddr_server = {};
   sockaddr_in saddr_client;
 
@@ -820,6 +825,7 @@ void gdb_init(u32 port)
                    (sockaddr*)&saddr_client, &client_addrlen);
 
   saddr_client.sin_addr.s_addr = ntohl(saddr_client.sin_addr.s_addr);
+#endif
 }
 
 static void gdb_init_generic(int domain, const sockaddr* server_addr, socklen_t server_addrlen,

@@ -57,8 +57,10 @@
 #include "Core/IOS/IOS.h"
 #include "Core/MemTools.h"
 #include "Core/Movie.h"
+#ifndef __SWITCH__
 #include "Core/NetPlayClient.h"
 #include "Core/NetPlayProto.h"
+#endif
 #include "Core/PatchEngine.h"
 #include "Core/PowerPC/JitInterface.h"
 #include "Core/PowerPC/PowerPC.h"
@@ -134,8 +136,10 @@ void SetIsThrottlerTempDisabled(bool disable)
 
 void FrameUpdateOnCPUThread()
 {
+#ifndef __SWITCH__
   if (NetPlay::IsNetPlayRunning())
     NetPlay::NetPlayClient::SendTimeBase();
+#endif
 }
 
 void OnFrameEnd()
@@ -522,9 +526,10 @@ static void EmuThread(std::unique_ptr<BootParameters> boot, WindowSystemInfo wsi
     {
       Wiimote::LoadConfig();
     }
-
+#ifndef __SWITCH__
     if (NetPlay::IsNetPlayRunning())
       NetPlay::SetupWiimotes();
+#endif
   }
 
   Common::ScopeGuard controller_guard{[init_controllers, init_wiimotes] {
@@ -980,7 +985,11 @@ void UpdateWantDeterminism(bool initial)
   // For now, this value is not itself configurable.  Instead, individual
   // settings that depend on it, such as GPU determinism mode. should have
   // override options for testing,
+#ifndef __SWITCH__
   bool new_want_determinism = Movie::IsMovieActive() || NetPlay::IsNetPlayRunning();
+#else
+  bool new_want_determinism = Movie::IsMovieActive();
+#endif
   if (new_want_determinism != s_wants_determinism || initial)
   {
     NOTICE_LOG(COMMON, "Want determinism <- %s", new_want_determinism ? "true" : "false");

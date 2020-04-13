@@ -29,7 +29,9 @@
 #include "InputCommon/ControllerInterface/Wiimote/Wiimote.h"
 #include "InputCommon/InputConfig.h"
 
+#ifndef __SWITCH__
 #include "SFML/Network.hpp"
+#endif
 
 namespace WiimoteReal
 {
@@ -303,9 +305,11 @@ void Wiimote::Read()
   {
     if (SConfig::GetInstance().iBBDumpPort > 0 && m_index == WIIMOTE_BALANCE_BOARD)
     {
+#ifndef __SWITCH__
       static sf::UdpSocket Socket;
       Socket.send((char*)rpt.data(), rpt.size(), sf::IpAddress::LocalHost,
                   SConfig::GetInstance().iBBDumpPort);
+#endif
     }
 
     // Add it to queue
@@ -329,9 +333,11 @@ bool Wiimote::Write()
 
   if (SConfig::GetInstance().iBBDumpPort > 0 && m_index == WIIMOTE_BALANCE_BOARD)
   {
+#ifndef __SWITCH__
     static sf::UdpSocket Socket;
     Socket.send((char*)rpt.data(), rpt.size(), sf::IpAddress::LocalHost,
                 SConfig::GetInstance().iBBDumpPort);
+#endif
   }
   int ret = IOWrite(rpt.data(), rpt.size());
 

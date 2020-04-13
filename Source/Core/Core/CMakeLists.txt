@@ -29,10 +29,10 @@ add_library(core
   MemTools.h
   Movie.cpp
   Movie.h
-  NetPlayClient.cpp
-  NetPlayClient.h
-  NetPlayServer.cpp
-  NetPlayServer.h
+  #NetPlayClient.cpp
+  #NetPlayClient.h
+  #NetPlayServer.cpp
+  #NetPlayServer.h
   PatchEngine.cpp
   PatchEngine.h
   State.cpp
@@ -58,8 +58,8 @@ add_library(core
   Config/GraphicsSettings.h
   Config/MainSettings.cpp
   Config/MainSettings.h
-  Config/NetplaySettings.cpp
-  Config/NetplaySettings.h
+  #Config/NetplaySettings.cpp
+  #Config/NetplaySettings.h
   Config/SYSCONFSettings.cpp
   Config/SYSCONFSettings.h
   Config/UISettings.cpp
@@ -72,8 +72,8 @@ add_library(core
   ConfigLoaders/IsSettingSaveable.h
   ConfigLoaders/MovieConfigLoader.cpp
   ConfigLoaders/MovieConfigLoader.h
-  ConfigLoaders/NetPlayConfigLoader.cpp
-  ConfigLoaders/NetPlayConfigLoader.h
+  #ConfigLoaders/NetPlayConfigLoader.cpp
+  #ConfigLoaders/NetPlayConfigLoader.h
   Debugger/Debugger_SymbolMap.cpp
   Debugger/Debugger_SymbolMap.h
   Debugger/Dump.cpp
@@ -205,8 +205,8 @@ add_library(core
   HW/EXI/EXI_DeviceDummy.h
   HW/EXI/EXI_DeviceEthernet.cpp
   HW/EXI/EXI_DeviceEthernet.h
-  HW/EXI/EXI_DeviceGecko.cpp
-  HW/EXI/EXI_DeviceGecko.h
+  #HW/EXI/EXI_DeviceGecko.cpp
+  #HW/EXI/EXI_DeviceGecko.h
   HW/EXI/EXI_DeviceIPL.cpp
   HW/EXI/EXI_DeviceIPL.h
   HW/EXI/EXI_DeviceMemoryCard.cpp
@@ -247,8 +247,8 @@ add_library(core
   HW/SI/SI_Device.h
   HW/SI/SI_DeviceDanceMat.cpp
   HW/SI/SI_DeviceDanceMat.h
-  HW/SI/SI_DeviceGBA.cpp
-  HW/SI/SI_DeviceGBA.h
+  #HW/SI/SI_DeviceGBA.cpp
+  #HW/SI/SI_DeviceGBA.h
   HW/SI/SI_DeviceGCAdapter.cpp
   HW/SI/SI_DeviceGCAdapter.h
   HW/SI/SI_DeviceGCController.cpp
@@ -547,12 +547,12 @@ PUBLIC
   common
   cubeb
   discio
-  enet
+  #enet
   inputcommon
   ${MBEDTLS_LIBRARIES}
   pugixml
-  sfml-network
-  sfml-system
+  #sfml-network
+  #sfml-system
   videonull
   videoogl
   videosoftware

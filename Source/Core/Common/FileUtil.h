@@ -10,6 +10,8 @@
 #include <string_view>
 #include <vector>
 
+#ifndef __SWITCH__
+#endif
 #include <sys/stat.h>
 
 #include "Common/CommonTypes.h"
@@ -107,8 +109,10 @@ public:
   u64 GetSize() const;
 
 private:
-  struct stat m_stat;
-  bool m_exists;
+  #ifndef __SWITCH__
+  #endif
+        struct stat m_stat;
+        bool m_exists;
 };
 
 // Returns true if the path exists

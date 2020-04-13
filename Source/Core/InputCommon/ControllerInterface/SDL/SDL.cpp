@@ -58,7 +58,7 @@ static bool HandleEventAndContinue(const SDL_Event& e)
   else if (e.type == SDL_JOYDEVICEREMOVED)
   {
     g_controller_interface.RemoveDevice([&e](const auto* device) {
-      const Joystick* joystick = dynamic_cast<const Joystick*>(device);
+      const Joystick* joystick = static_cast<const Joystick*>(device);
       return joystick && SDL_JoystickInstanceID(joystick->GetSDLJoystick()) == e.jdevice.which;
     });
   }
